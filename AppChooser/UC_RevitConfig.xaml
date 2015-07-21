@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="SPTR.AppChooser.UC_RevitConfig"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ac="clr-namespace:AppChooser"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <UserControl.Resources>
+        <Style TargetType="Button" x:Key="st_LaunchButton">
+            <Setter Property="Background" Value="Orange" />
+            <Setter Property="Padding" Value="5,20" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Addin Configuration" FontSize="14" VerticalAlignment="Center" FontWeight="Bold" Margin="0,2" />
+            <TextBlock Text="Set All:" Grid.Column="1" VerticalAlignment="Center" Margin="5,2" />
+            <Button Grid.Column="2" Name="btn_AllYes" Click="btn_AllYes_Click" Padding="4,2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                <Image Source="Images/Glyph_GreenCheck.png" />
+            </Button>
+            <Button Grid.Column="3" Name="btn_AllNo" Click="btn_AllNo_Click" Padding="4,2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                <Image Source="Images/Glyph_Remove.png" />
+            </Button>
+        </Grid>
+        <Border Grid.Row="1" BorderBrush="Silver" BorderThickness="1" Margin="0,5" Background="WhiteSmoke">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Saved Configurations:" Margin="0,2,5,2" VerticalAlignment="Center" />
+                <ComboBox ItemsSource="{Binding ConfigOptions}" Margin="5,2" Grid.Column="1" SelectedItem="{Binding SelectedConfig, Mode=TwoWay}" />
+                <Button Grid.Column="2" Name="btn_Save" Click="btn_Save_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" ToolTip="Save changes to the current configuration">
+                    <Image Source="Images\Icon_Save.png" />
+                </Button>
+                <Button Grid.Column="3" Name="btn_SaveAs" Click="btn_SaveAs_Click" ToolTip="Save the current configuration with a new name." Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                    <Grid>
+                        <Image Source="Images\Icon_Save.png" Margin="5,2,0,0" />
+                        <Image Source="Images\Icon_Save.png" Margin="0,0,0,2" />
+                    </Grid>
+                </Button>
+                <Button Grid.Column="4" Name="btn_Delete" Click="btn_Delete_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" ToolTip="Delete the current configuration">
+                    <Image Source="Images\Glyph_Remove.png" />
+                </Button>
+            </Grid>
+        </Border>
+        <ListView Grid.Row="2" ItemsSource="{Binding AddinData}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Enable">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleButton IsChecked="{Binding IsEnabled, Mode=TwoWay}" Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}">
+                                        <Image Source="Images\Glyph_GreenCheck.png" Width="12" />
+                                    </ToggleButton>
+                                    <ToggleButton IsChecked="{Binding IsDisabled, Mode=TwoWay}" Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}">
+                                        <Image Source="Images\Glyph_Remove.png" Width="12" />
+                                    </ToggleButton>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Level}" />
+                    <GridViewColumn Header="Addin" DisplayMemberBinding="{Binding DisplayName}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Revit Flavor:" Margin="0,2,5,2" VerticalAlignment="Center" Visibility="{Binding MultiFlavor, Converter={StaticResource BoolToVis}}" />
+            <ComboBox Grid.Column="1" ItemsSource="{Binding FlavorOptions}" SelectedItem="{Binding SelectedFlavor, Mode=TwoWay}" Visibility="{Binding MultiFlavor, Converter={StaticResource BoolToVis}}" Margin="5,2,0,2" VerticalAlignment="Center" />
+            <TextBlock Text="File to Open (Optional):" Grid.Row="1" Margin="0,2,5,2" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Margin="5,2,0,2" Text="{Binding RevitFile, Mode=TwoWay}" Padding="2,2,20,2" Grid.Row="1" />
+            <Button Name="btn_Browse" Grid.Column="1" HorizontalAlignment="Right" Margin="0,2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Content="..." Click="btn_Browse_Click" Grid.Row="1" />
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Style="{StaticResource st_LaunchButton}" Content="Launch Clean" ToolTip="Launch Revit with no addins enabled" Name="btn_Clean" Click="btn_Clean_Click" />
+            <Button Grid.Column="1" Style="{StaticResource st_LaunchButton}" Content="Launch Full" ToolTip="Launch Revit with all addins enabled" Name="btn_Full" Click="btn_Full_Click" />
+            <Button Grid.Column="2" Style="{StaticResource st_LaunchButton}" Content="Launch Custom" ToolTip="Launch Revit with the addins state listed above" Name="btn_Custom" Click="btn_Custom_Click" />
+        </Grid>
+    </Grid>
+</UserControl>

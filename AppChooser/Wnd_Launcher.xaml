@@ -1,0 +1,29 @@
+﻿<Window x:Class="SPTR.AppChooser.Wnd_Launcher"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ac="clr-namespace:SPTR.AppChooser"
+        Icon="Images/DialogueIcon_32.png"
+        Title="SPECtrumBIM | AppEaser" Height="500" Width="650">
+    <Window.Resources>
+        <Style TargetType="TabItem">
+            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <TabControl ItemsSource="{Binding RevitVersions}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Revit " FontSize="20" />
+                        <TextBlock Text="{Binding RevitYear}" FontWeight="Bold" FontSize="20" />
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ac:UC_RevitConfig />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </Grid>
+</Window>
